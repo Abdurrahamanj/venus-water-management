@@ -294,14 +294,24 @@ export const AdminDashboard: React.FC = () => {
                 Real-time review of prospective client submissions, reference IDs, and notification dispatches.
               </p>
             </div>
-            <button
-              onClick={loadEnquiries}
-              disabled={refreshing}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-[#102B46] text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95"
-            >
-              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-[#168AAD]' : ''}`} />
-              <span>{refreshing ? 'Refreshing...' : 'Refresh Records'}</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={loadEnquiries}
+                disabled={refreshing}
+                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-[#102B46] text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95"
+              >
+                <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-[#168AAD]' : ''}`} />
+                <span>{refreshing ? 'Refreshing...' : 'Refresh Records'}</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95"
+                title="Sign out of Admin Dashboard"
+              >
+                <LogOut className="w-4 h-4 text-red-600" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
 
           {authError && (

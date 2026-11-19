@@ -227,15 +227,27 @@ export async function submitEnquiry(
 }
 
 export async function fetchServerEnquiries(): Promise<EnquiryRecord[]> {
+  const localRecords = getLocalEnquiries();
   try {
     const res = await fetch('/api/enquiries');
     if (res.ok) {
-      return await res.json();
+      const serverRecords = await res.json();
+      if (Array.isArray(serverRecords) && serverRecords.length > 0) {
+        // Merge without duplicates by reference_id or id
+        const seen = new Set(serverRecords.map((r: EnquiryRecord) => r.reference_id || r.id));
+        const merged = [...serverRecords];
+        for (const local of localRecords) {
+          if (!seen.has(local.reference_id || local.id)) {
+            merged.push(local);
+          }
+        }
+        return merged;
+      }
     }
   } catch (err) {
     console.warn('Could not fetch from /api/enquiries:', err);
   }
-  return getLocalEnquiries();
+  return localRecords;
 }
 
 export function getLocalEnquiries(): EnquiryRecord[] {
