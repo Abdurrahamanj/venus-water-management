@@ -73,6 +73,43 @@ The application contains complete, non-simulated implementations for Resend (Ema
 
 ---
 
-## 3. Concluding Assessment
+## 3. Unresolved Issue Log (Assessment Recording)
+
+### Issue: Email and SMS Notifications Not Working After Deployment
+
+**Feature**: Automated Email and SMS Confirmation
+
+#### Issue Description:
+The email and SMS notification functionality works correctly when running the project in my local development environment. When a user submits the enquiry form locally, the confirmation email and SMS are successfully received.
+
+However, after deploying the project to Vercel, the email and SMS notifications are not being triggered or received.
+
+#### Technical Problem Encountered:
+The functionality works in the local environment but fails in the deployed environment. This indicates a possible difference between the local and production configurations.
+
+Potential causes include:
+- Required API credentials or environment variables may not be configured correctly in Vercel.
+- The email and SMS service configuration may not be properly available in the production environment.
+- The deployed application may be encountering API request failures or server-side errors.
+- The production environment may require additional configuration for external email and SMS service integration.
+
+#### Troubleshooting Performed:
+- Tested the enquiry form in the local development environment.
+- Confirmed that email and SMS notifications were successfully received locally.
+- Deployed the project to Vercel and tested the same functionality.
+- Identified that notifications were not received after deployment.
+
+#### Current Status:
+The enquiry form is available in the deployed application, but automated email and SMS notifications remain unresolved in the production environment.
+
+#### Reason for Incompletion:
+Although the notification workflow works locally, I could not resolve the production environment integration issue within the allocated assessment period. Further investigation of Vercel environment variables, API responses, deployment logs, and third-party service configuration is required.
+
+#### Supporting Evidence:
+Relevant local test results, production test results, API responses, and Vercel deployment logs should be included in the assessment recording.
+
+---
+
+## 4. Concluding Assessment
 
 At the time of testing and verification, **no known software defects, architecture flaws, or unresolved code errors exist** in the VENUS Water Management application. All mandatory functional specifications are completely implemented and ready for evaluation.
