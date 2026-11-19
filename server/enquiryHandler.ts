@@ -486,3 +486,5 @@ export async function processEnquirySubmission(payload: {
     },
   };
 }
+
+export const handleEnquirySubmission = processEnquirySubmission;
