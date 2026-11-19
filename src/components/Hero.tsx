@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Droplets, ShieldCheck, Activity, Sparkles } from 'lucide-react';
+import { ImageWithFallback } from './ImageWithFallback';
 
 export const Hero: React.FC = () => {
   return (
@@ -91,8 +92,8 @@ export const Hero: React.FC = () => {
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Main Image Frame */}
               <div className="relative rounded-2xl overflow-hidden border border-white/15 shadow-2xl shadow-black/40 group">
-                <img
-                  src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=1000&auto=format&fit=crop"
+                <ImageWithFallback
+                  src="/images/hero-facility.jpg"
                   alt="Modern water treatment facility and control piping"
                   className="w-full h-80 sm:h-96 object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
                 />

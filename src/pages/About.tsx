@@ -11,6 +11,7 @@ import {
   AlertCircle,
   ArrowRight,
 } from 'lucide-react';
+import { ImageWithFallback } from '../components/ImageWithFallback';
 
 export const About: React.FC = () => {
   return (
@@ -68,8 +69,8 @@ export const About: React.FC = () => {
 
             <div className="lg:col-span-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200">
-                <img
-                  src="https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop"
+                <ImageWithFallback
+                  src="/images/about-facility.jpg"
                   alt="Industrial water piping and pressure gauges"
                   className="w-full h-96 object-cover"
                 />
@@ -186,8 +187,8 @@ export const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200">
-                <img
-                  src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=1000&auto=format&fit=crop"
+                <ImageWithFallback
+                  src="/images/pure-water.jpg"
                   alt="Cascading natural water representing pristine environmental conservation"
                   className="w-full h-96 object-cover"
                 />

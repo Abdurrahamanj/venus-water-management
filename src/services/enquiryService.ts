@@ -69,17 +69,65 @@ export async function submitEnquiry(
     message: data.message.trim(),
   };
 
-  const formattedRefId = getNextSequenceNumber();
+  // 1. Primary: Transmit to real server backend (/api/submit-enquiry)
+  // This executes server-side validation, calls Resend API, and calls Twilio API
+  try {
+    const response = await fetch('/api/submit-enquiry', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sanitizedData),
+    });
 
-  // If Supabase is fully configured, execute real backend integration
+    if (response.ok) {
+      const result = await response.json();
+      
+      // Also sync to local storage for instant offline resilience
+      try {
+        const existing = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
+        existing.unshift({
+          id: result.raw_uuid || crypto.randomUUID(),
+          reference_id: result.enquiry_id,
+          customer_name: sanitizedData.customer_name,
+          email: sanitizedData.email,
+          mobile: sanitizedData.mobile,
+          message: sanitizedData.message,
+          created_at: result.created_at,
+          email_status: result.email_status,
+          sms_status: result.sms_status,
+        });
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(existing));
+      } catch (e) {
+        console.warn('Local cache sync warning:', e);
+      }
+
+      return {
+        success: true,
+        enquiry_id: result.enquiry_id,
+        raw_uuid: result.raw_uuid,
+        created_at: result.created_at,
+        email_status: result.email_status,
+        sms_status: result.sms_status,
+        message: result.message,
+      };
+    } else {
+      const errJson = await response.json().catch(() => null);
+      console.warn('Backend API returned non-200 response:', errJson);
+    }
+  } catch (apiErr) {
+    console.warn('Server API endpoint unreachable; attempting Supabase or local fallback:', apiErr);
+  }
+
+  // 2. Secondary: If Supabase Cloud Edge Function is explicitly configured
   if (isSupabaseConfigured) {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const customFunctionUrl = import.meta.env.VITE_SUPABASE_FUNCTION_URL;
     const functionUrl = customFunctionUrl || `${supabaseUrl}/functions/v1/submit-enquiry`;
     const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const formattedRefId = getNextSequenceNumber();
 
     try {
-      // 1. Attempt to invoke Supabase Edge Function for end-to-end processing (DB + Resend + Twilio)
       const edgeRes = await fetch(functionUrl, {
         method: 'POST',
         headers: {
@@ -106,15 +154,12 @@ export async function submitEnquiry(
             edgeJson.message ||
             'Thank you for contacting VENUS. Your enquiry has been received successfully. Our team will review your request.',
         };
-      } else {
-        const errJson = await edgeRes.json().catch(() => null);
-        console.warn('Edge function returned error, falling back to direct table insertion:', errJson);
       }
     } catch (edgeErr) {
-      console.warn('Edge function invoke attempt failed or not yet deployed; falling back to direct Supabase table insertion:', edgeErr);
+      console.warn('Supabase Edge function invocation error:', edgeErr);
     }
 
-    // 2. Direct database insertion via Supabase client (using Row Level Security INSERT policy)
+    // Direct database insertion via Supabase client (using Row Level Security INSERT policy)
     const { data: insertedData, error: dbError } = await supabase
       .from('enquiries')
       .insert({
@@ -144,7 +189,8 @@ export async function submitEnquiry(
     };
   }
 
-  // 3. Fallback when Supabase credentials are pending in local environment
+  // 3. Fallback when network is completely offline
+  const formattedRefId = getNextSequenceNumber();
   const mockId = crypto.randomUUID();
   const now = new Date().toISOString();
   const localRecord: EnquiryRecord = {
@@ -155,8 +201,8 @@ export async function submitEnquiry(
     mobile: sanitizedData.mobile,
     message: sanitizedData.message,
     created_at: now,
-    email_status: 'PENDING: Configure RESEND_API_KEY in Supabase Edge Secrets',
-    sms_status: 'PENDING: Configure TWILIO credentials in Supabase Edge Secrets',
+    email_status: 'PENDING: Offline cache',
+    sms_status: 'PENDING: Offline cache',
   };
 
   try {
@@ -178,6 +224,18 @@ export async function submitEnquiry(
       'Thank you for contacting VENUS. Your enquiry has been received successfully. Our team will review your request.',
     is_demo: true,
   };
+}
+
+export async function fetchServerEnquiries(): Promise<EnquiryRecord[]> {
+  try {
+    const res = await fetch('/api/enquiries');
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Could not fetch from /api/enquiries:', err);
+  }
+  return getLocalEnquiries();
 }
 
 export function getLocalEnquiries(): EnquiryRecord[] {

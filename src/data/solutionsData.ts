@@ -7,8 +7,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Advanced Purification Systems',
     description:
       'Proposed modular filtration and high-performance purification systems aimed at transforming raw, brackish, and municipal sources into certified potable and process-ready water.',
-    image:
-      'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=800&auto=format&fit=crop',
+    image: '/images/effluent-treatment.jpg',
     features: [
       'Multi-barrier membrane ultrafiltration',
       'Reverse osmosis (RO) desalinization schemes',
@@ -23,8 +22,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Effluent Clarification & Treatment',
     description:
       'Engineered wastewater mitigation designed for municipal and industrial runoff, minimizing environmental discharge footprints through biological and chemical neutralization.',
-    image:
-      'https://images.unsplash.com/photo-1541888946425-d0fbb186156f?q=80&w=800&auto=format&fit=crop',
+    image: '/images/sewage-treatment.jpg',
     features: [
       'Biological nutrient removal (BNR)',
       'Membrane bioreactor (MBR) processing',
@@ -39,8 +37,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Manufacturing & Process Cooling',
     description:
       'Targeted solutions engineered for heavy industries, power facilities, and chemical manufacturing to control scaling, corrosion, and microbiological biofouling in cooling towers.',
-    image:
-      'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?q=80&w=800&auto=format&fit=crop',
+    image: '/images/zero-liquid-discharge.jpg',
     features: [
       'Boiler feed water demineralization',
       'Cooling circuit chemical optimization',
@@ -55,8 +52,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Circular Water Economics',
     description:
       'Transforming treated secondary effluent into high-grade reclaimed water for non-potable commercial applications, agricultural irrigation, and groundwater aquifer replenishment.',
-    image:
-      'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=800&auto=format&fit=crop',
+    image: '/images/reverse-osmosis.jpg',
     features: [
       'Tertiary polishing & micro-filtration',
       'Greywater separation & decentralized reuse',
@@ -71,8 +67,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Efficiency Audits & Smart Flow',
     description:
       'Strategic conservation engineering featuring acoustic leak detection, pressure management regimes, and automated telemetry to stem system losses and optimize per-capita demand.',
-    image:
-      'https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=800&auto=format&fit=crop',
+    image: '/images/rainwater-harvesting.jpg',
     features: [
       'Comprehensive non-revenue water (NRW) reduction',
       'Smart ultrasonic metering & telemetry',
@@ -87,8 +82,7 @@ export const SOLUTIONS_DATA: SolutionItem[] = [
     subtitle: 'Resilient Civil Water Works',
     description:
       'Long-term asset modernization focusing on climate-resilient distribution mains, stormwater retention basins, and renewable-powered pumping architecture.',
-    image:
-      'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=800&auto=format&fit=crop',
+    image: '/images/smart-iot-monitoring.jpg',
     features: [
       'Low-carbon pipeline materials & hydraulic modeling',
       'Solar-integrated pumping stations',

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Hero } from '../components/Hero';
 import { SolutionCard } from '../components/SolutionCard';
+import { ImageWithFallback } from '../components/ImageWithFallback';
 import { SOLUTIONS_DATA } from '../data/solutionsData';
 import {
   Droplets,
@@ -75,8 +76,8 @@ export const Home: React.FC = () => {
 
             <div className="lg:col-span-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200">
-                <img
-                  src="https://images.unsplash.com/photo-1541888946425-d0fbb186156f?q=80&w=1000&auto=format&fit=crop"
+                <ImageWithFallback
+                  src="/images/industrial-clarifier.jpg"
                   alt="Industrial water clarifier basin and treatment tanks"
                   className="w-full h-96 object-cover"
                 />
@@ -280,8 +281,8 @@ export const Home: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 order-2 lg:order-1">
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200">
-                <img
-                  src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=1000&auto=format&fit=crop"
+                <ImageWithFallback
+                  src="/images/pure-water.jpg"
                   alt="Clear pristine water reflecting nature and conservation"
                   className="w-full h-96 object-cover"
                 />

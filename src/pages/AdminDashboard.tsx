@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { EnquiryRecord } from '../lib/supabase';
-import { getLocalEnquiries, formatReferenceId } from '../services/enquiryService';
+import { fetchServerEnquiries, formatReferenceId } from '../services/enquiryService';
 import {
   Shield,
   LogOut,
@@ -103,15 +103,14 @@ export const AdminDashboard: React.FC = () => {
 
         if (error) {
           console.error('Failed to load enquiries from Supabase:', error);
-          // Fallback to local storage if table is fresh
-          const local = getLocalEnquiries();
-          setEnquiries(local);
+          const records = await fetchServerEnquiries();
+          setEnquiries(records);
         } else {
           setEnquiries(data || []);
         }
       } else {
-        const local = getLocalEnquiries();
-        setEnquiries(local);
+        const records = await fetchServerEnquiries();
+        setEnquiries(records);
       }
     } catch (err) {
       console.error('Error fetching enquiries:', err);

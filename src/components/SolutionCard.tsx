@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ImageWithFallback } from './ImageWithFallback';
 
 export interface SolutionItem {
   id: string;
@@ -29,11 +30,12 @@ export const SolutionCard: React.FC<SolutionCardProps> = ({ solution, featured =
       <div>
         {/* Card Image with Proposed Tag overlay */}
         <div className="relative h-52 sm:h-56 overflow-hidden bg-slate-100">
-          <img
+          <ImageWithFallback
             src={solution.image}
             alt={solution.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            fallbackSrc="/images/hero-facility.jpg"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#102B46]/80 via-transparent to-black/20" />
 
