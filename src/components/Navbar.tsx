@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Droplets, Menu, X, Shield, ArrowRight, LogOut } from 'lucide-react';
+import { Droplets, Menu, X, Shield, ArrowRight } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -16,18 +15,10 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu and check admin state on route change
+  // Close mobile menu on page change
   useEffect(() => {
     setIsOpen(false);
-    const mockAuth = localStorage.getItem('venus_mock_admin_authenticated') === 'true';
-    setIsAdminLoggedIn(mockAuth);
   }, [location.pathname]);
-
-  const handleAdminLogout = () => {
-    localStorage.removeItem('venus_mock_admin_authenticated');
-    setIsAdminLoggedIn(false);
-    window.location.href = '/admin/login';
-  };
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -85,35 +76,14 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            {isAdminLoggedIn ? (
-              <div className="flex items-center space-x-2">
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold text-emerald-300 hover:text-white border border-emerald-500/30 bg-emerald-950/40 rounded-lg transition-all"
-                  title="Admin Dashboard"
-                >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Admin Dashboard</span>
-                </Link>
-                <button
-                  onClick={handleAdminLogout}
-                  className="flex items-center space-x-1 px-2.5 py-2 text-xs font-semibold text-red-300 hover:text-red-200 border border-red-500/20 bg-red-950/30 rounded-lg transition-all cursor-pointer"
-                  title="Sign out of Admin Session"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Logout</span>
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/admin/login"
-                className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-white border border-white/15 rounded-lg hover:bg-white/5 transition-all"
-                title="Admin Portal Access"
-              >
-                <Shield className="w-3.5 h-3.5 text-[#48CAE4]" />
-                <span>Admin Login</span>
-              </Link>
-            )}
+            <Link
+              to="/admin/login"
+              className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-white border border-white/15 rounded-lg hover:bg-white/5 transition-all"
+              title="Admin Portal Access"
+            >
+              <Shield className="w-3.5 h-3.5 text-[#48CAE4]" />
+              <span>Admin Portal</span>
+            </Link>
             <Link
               to="/contact"
               className="flex items-center space-x-1.5 px-4 py-2 text-sm font-semibold text-[#102B46] bg-gradient-to-r from-[#48CAE4] to-[#90E0EF] hover:from-[#38b6d0] hover:to-[#7ad7e8] rounded-lg shadow-sm hover:shadow transition-all"
@@ -126,11 +96,11 @@ export const Navbar: React.FC = () => {
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center space-x-2">
             <Link
-              to={isAdminLoggedIn ? "/admin/dashboard" : "/admin/login"}
+              to="/admin/login"
               className="p-2 text-slate-300 hover:text-white"
-              title={isAdminLoggedIn ? "Admin Dashboard" : "Admin Login"}
+              title="Admin Login"
             >
-              <Shield className={`w-5 h-5 ${isAdminLoggedIn ? 'text-emerald-400' : 'text-[#48CAE4]'}`} />
+              <Shield className="w-5 h-5 text-[#48CAE4]" />
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -169,32 +139,13 @@ export const Navbar: React.FC = () => {
             >
               Contact Us & Request Solution
             </Link>
-            {isAdminLoggedIn ? (
-              <div className="flex flex-col space-y-2">
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center justify-center space-x-2 py-2 px-4 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-sm hover:text-white"
-                >
-                  <Shield className="w-4 h-4 text-emerald-400" />
-                  <span>Open Admin Dashboard</span>
-                </Link>
-                <button
-                  onClick={handleAdminLogout}
-                  className="flex items-center justify-center space-x-2 py-2 px-4 rounded-lg bg-red-950/30 border border-red-500/20 text-red-300 text-sm hover:text-white"
-                >
-                  <LogOut className="w-4 h-4 text-red-400" />
-                  <span>Sign Out of Admin</span>
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/admin/login"
-                className="flex items-center justify-center space-x-2 py-2 px-4 rounded-lg border border-white/20 text-slate-300 text-sm hover:text-white"
-              >
-                <Shield className="w-4 h-4 text-[#48CAE4]" />
-                <span>Admin Login Portal</span>
-              </Link>
-            )}
+            <Link
+              to="/admin/login"
+              className="flex items-center justify-center space-x-2 py-2 px-4 rounded-lg border border-white/20 text-slate-300 text-sm hover:text-white"
+            >
+              <Shield className="w-4 h-4 text-[#48CAE4]" />
+              <span>Admin Portal</span>
+            </Link>
           </div>
         </div>
       )}
