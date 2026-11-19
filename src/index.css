@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary-navy: #102B46;
+    --deep-blue: #164E78;
+    --water-blue: #168AAD;
+    --aqua: #48CAE4;
+    --light-bg: #F4F8FA;
+    --dark-text: #172B3A;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #172B3A;
+    background-color: #F4F8FA;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+  }
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Glassmorphism and gradient utilities */
+.glass-nav {
+  background: rgba(16, 43, 70, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.gradient-water {
+  background: linear-gradient(135deg, #102B46 0%, #164E78 50%, #168AAD 100%);
+}
+
+.gradient-text-water {
+  background: linear-gradient(135deg, #48CAE4 0%, #90E0EF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-card-border {
+  border-image: linear-gradient(to bottom right, #48CAE4, #168AAD, #102B46) 1;
+}

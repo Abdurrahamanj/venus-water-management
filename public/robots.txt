@@ -1,0 +1,7 @@
+# Robots.txt for VENUS Water Management
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+
+Sitemap: https://venus-water-management.vercel.app/sitemap.xml
