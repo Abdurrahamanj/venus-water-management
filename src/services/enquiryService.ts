@@ -10,7 +10,8 @@ export interface SubmitEnquiryData {
 
 export interface SubmitEnquiryResponse {
   success: boolean;
-  enquiry_id: string;
+  enquiry_id: string; // Branded format: V10001, V10002...
+  raw_uuid?: string;
   created_at: string;
   email_status: string;
   sms_status: string;
@@ -19,6 +20,44 @@ export interface SubmitEnquiryResponse {
 }
 
 const LOCAL_STORAGE_KEY = 'venus_enquiries_local_store';
+const SEQ_STORAGE_KEY = 'venus_enquiry_seq_counter';
+
+/**
+ * Generates sequential branded Reference IDs starting at V10001
+ */
+export function getNextSequenceNumber(): string {
+  try {
+    const existing = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
+    const storedSeq = localStorage.getItem(SEQ_STORAGE_KEY);
+    let nextNum = storedSeq ? parseInt(storedSeq, 10) + 1 : 10000 + existing.length + 1;
+    if (isNaN(nextNum) || nextNum < 10001) {
+      nextNum = 10001;
+    }
+    localStorage.setItem(SEQ_STORAGE_KEY, nextNum.toString());
+    return `V${nextNum}`;
+  } catch {
+    return 'V10001';
+  }
+}
+
+/**
+ * Formats any raw UUID or stored ID into clean V10001 format
+ */
+export function formatReferenceId(rawId: string, index?: number): string {
+  if (!rawId) return 'V10001';
+  if (/^V\d{5,}$/i.test(rawId)) {
+    return rawId.toUpperCase();
+  }
+  if (typeof index === 'number' && index >= 0) {
+    return `V${10001 + index}`;
+  }
+  let hash = 0;
+  for (let i = 0; i < rawId.length; i++) {
+    hash = (hash * 31 + rawId.charCodeAt(i)) & 0x7fffffff;
+  }
+  const code = 10001 + (hash % 89999);
+  return `V${code}`;
+}
 
 export async function submitEnquiry(
   data: SubmitEnquiryData
@@ -29,6 +68,8 @@ export async function submitEnquiry(
     mobile: data.mobile.trim(),
     message: data.message.trim(),
   };
+
+  const formattedRefId = getNextSequenceNumber();
 
   // If Supabase is fully configured, execute real backend integration
   if (isSupabaseConfigured) {
@@ -46,14 +87,18 @@ export async function submitEnquiry(
           'apikey': anonKey,
           'Authorization': `Bearer ${anonKey}`,
         },
-        body: JSON.stringify(sanitizedData),
+        body: JSON.stringify({
+          ...sanitizedData,
+          reference_id: formattedRefId,
+        }),
       });
 
       if (edgeRes.ok) {
         const edgeJson = await edgeRes.json();
         return {
           success: true,
-          enquiry_id: edgeJson.enquiry_id,
+          enquiry_id: formattedRefId,
+          raw_uuid: edgeJson.enquiry_id,
           created_at: edgeJson.created_at,
           email_status: edgeJson.email_status || 'SENT',
           sms_status: edgeJson.sms_status || 'SENT',
@@ -89,7 +134,8 @@ export async function submitEnquiry(
 
     return {
       success: true,
-      enquiry_id: insertedData.id,
+      enquiry_id: formattedRefId,
+      raw_uuid: insertedData.id,
       created_at: insertedData.created_at,
       email_status: insertedData.email_status,
       sms_status: insertedData.sms_status,
@@ -103,6 +149,7 @@ export async function submitEnquiry(
   const now = new Date().toISOString();
   const localRecord: EnquiryRecord = {
     id: mockId,
+    reference_id: formattedRefId,
     customer_name: sanitizedData.customer_name,
     email: sanitizedData.email,
     mobile: sanitizedData.mobile,
@@ -122,7 +169,8 @@ export async function submitEnquiry(
 
   return {
     success: true,
-    enquiry_id: mockId,
+    enquiry_id: formattedRefId,
+    raw_uuid: mockId,
     created_at: now,
     email_status: localRecord.email_status,
     sms_status: localRecord.sms_status,

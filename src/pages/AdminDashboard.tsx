@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { EnquiryRecord } from '../lib/supabase';
-import { getLocalEnquiries } from '../services/enquiryService';
+import { getLocalEnquiries, formatReferenceId } from '../services/enquiryService';
 import {
   Shield,
   LogOut,
@@ -154,8 +154,10 @@ export const AdminDashboard: React.FC = () => {
       .filter((e) => {
         // Search term
         const query = searchTerm.toLowerCase().trim();
+        const refCode = (e.reference_id || formatReferenceId(e.id)).toLowerCase();
         const matchesSearch =
           !query ||
+          refCode.includes(query) ||
           e.customer_name.toLowerCase().includes(query) ||
           e.email.toLowerCase().includes(query) ||
           e.id.toLowerCase().includes(query) ||
@@ -445,9 +447,9 @@ export const AdminDashboard: React.FC = () => {
                         className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
                         onClick={() => setSelectedEnquiry(enquiry)}
                       >
-                        {/* ID */}
-                        <td className="py-3.5 px-4 sm:px-6 font-mono text-xs font-semibold text-[#168AAD]">
-                          {enquiry.id.slice(0, 8)}...
+                        {/* Reference ID (e.g. V10001) */}
+                        <td className="py-3.5 px-4 sm:px-6 font-mono text-xs font-bold text-[#168AAD]">
+                          {enquiry.reference_id || formatReferenceId(enquiry.id)}
                         </td>
 
                         {/* Customer Name */}
@@ -555,9 +557,14 @@ export const AdminDashboard: React.FC = () => {
                 <h3 className="text-2xl font-bold text-[#102B46] font-['Plus_Jakarta_Sans']">
                   {selectedEnquiry.customer_name}
                 </h3>
-                <p className="font-mono text-xs text-slate-400 mt-1">
-                  UUID: {selectedEnquiry.id}
-                </p>
+                <div className="flex items-center space-x-2 mt-1">
+                  <span className="font-mono text-xs font-bold text-[#102B46] bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                    ID: {selectedEnquiry.reference_id || formatReferenceId(selectedEnquiry.id)}
+                  </span>
+                  <span className="font-mono text-[11px] text-slate-400">
+                    ({selectedEnquiry.id})
+                  </span>
+                </div>
               </div>
 
               {/* Data Grid */}

@@ -30,6 +30,7 @@ export const supabase = createClient(
 
 export interface EnquiryRecord {
   id: string;
+  reference_id?: string;
   customer_name: string;
   email: string;
   mobile: string;

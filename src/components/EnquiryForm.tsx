@@ -136,89 +136,59 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({ initialSubject, onSucc
 
         {/* Success State View */}
         {submissionResult ? (
-          <div className="space-y-6 py-2">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center mx-auto text-emerald-600 shadow-sm animate-in fade-in zoom-in duration-300">
-              <CheckCircle2 className="w-9 h-9" />
+          <div className="space-y-6 py-6 text-center animate-in fade-in zoom-in-95 duration-300">
+            <div className="w-20 h-20 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center mx-auto text-emerald-600 shadow-md">
+              <CheckCircle2 className="w-11 h-11" />
             </div>
 
-            <div className="text-center space-y-2">
-              <h4 className="text-xl font-bold text-[#102B46]">
-                Enquiry Successfully Received
+            <div className="space-y-2 max-w-md mx-auto">
+              <h4 className="text-2xl font-bold text-[#102B46] font-['Plus_Jakarta_Sans']">
+                Enquiry Successfully Submitted
               </h4>
-              <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                {submissionResult.message}
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Thank you for contacting VENUS. Your enquiry has been received successfully. Our team will review your request.
               </p>
             </div>
 
-            {/* Reference ID and Metadata Card */}
-            <div className="bg-[#F4F8FA] rounded-xl border border-slate-200 p-5 space-y-4 text-xs sm:text-sm">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">Enquiry Reference ID:</span>
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono font-semibold text-[#102B46] text-xs sm:text-sm bg-white px-2 py-1 rounded border border-slate-200">
-                    {submissionResult.enquiry_id}
-                  </span>
-                  <button
-                    onClick={() => copyToClipboard(submissionResult.enquiry_id)}
-                    className="p-1.5 text-slate-500 hover:text-[#102B46] hover:bg-slate-200 rounded transition-colors"
-                    title="Copy Reference ID"
-                  >
-                    {copiedId ? (
-                      <Check className="w-4 h-4 text-emerald-600" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">Submission Timestamp (UTC):</span>
-                <span className="font-mono text-slate-700">
-                  {new Date(submissionResult.created_at).toUTCString()}
+            {/* Clean Branded Reference ID Card (e.g. V10001) */}
+            <div className="bg-[#F4F8FA] rounded-2xl border border-slate-200/90 p-6 max-w-sm mx-auto shadow-sm space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                Enquiry Reference ID
+              </span>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-3xl sm:text-4xl font-extrabold font-mono text-[#102B46] tracking-wider">
+                  {submissionResult.enquiry_id}
                 </span>
-              </div>
-
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">Email Dispatch Status:</span>
-                <span
-                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                    submissionResult.email_status === 'SENT'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-800'
-                  }`}
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(submissionResult.enquiry_id)}
+                  className="p-2 text-slate-500 hover:text-[#102B46] hover:bg-slate-200 rounded-lg transition-colors"
+                  title="Copy Reference ID"
                 >
-                  {submissionResult.email_status}
-                </span>
+                  {copiedId ? (
+                    <Check className="w-5 h-5 text-emerald-600" />
+                  ) : (
+                    <Copy className="w-5 h-5" />
+                  )}
+                </button>
               </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">SMS Dispatch Status:</span>
-                <span
-                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                    submissionResult.sms_status === 'SENT'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-800'
-                  }`}
-                >
-                  {submissionResult.sms_status}
-                </span>
-              </div>
+              {copiedId && (
+                <p className="text-xs text-emerald-600 font-semibold pt-1">
+                  Reference ID copied to clipboard!
+                </p>
+              )}
             </div>
 
-            {submissionResult.is_demo && (
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
-                <strong>Note:</strong> Enquiry stored locally. To persist directly in Supabase and trigger live Resend emails & Twilio SMS, configure <code>VITE_SUPABASE_URL</code> and backend API keys.
-              </div>
-            )}
-
-            <button
-              onClick={handleResetForm}
-              className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-[#102B46] text-white hover:bg-[#164E78] rounded-xl font-semibold text-sm transition-all"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Submit Another Enquiry</span>
-            </button>
+            <div className="pt-2 max-w-sm mx-auto">
+              <button
+                type="button"
+                onClick={handleResetForm}
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-[#102B46] text-white hover:bg-[#164E78] rounded-xl font-semibold text-sm transition-all shadow-sm active:scale-[0.99]"
+              >
+                <RefreshCw className="w-4 h-4" />
+                <span>Submit Another Enquiry</span>
+              </button>
+            </div>
           </div>
         ) : (
           /* Active Form View */
