@@ -3,6 +3,9 @@
 
 A production-oriented full-stack web application for **VENUS**, an enterprise water management and sustainability solutions company. Designed and engineered with a modern aesthetic, complete database persistence, Row Level Security (RLS), edge serverless dispatches (Resend Email & Twilio SMS), secure multi-factor administrator dashboard, and SEO metadata.
 
+> [!NOTE]
+> For a detailed, comprehensive deep dive into the technologies, how the application was built, and the full API directory (with request/response schemas), refer to [TECH_STACK_AND_APIS.md](file:///c:/Users/abdur/Desktop/Anti_Gravity/RoseDesign-Technical%20assessment/TECH_STACK_AND_APIS.md).
+
 ---
 
 ## 1. Project Overview & Positioning
